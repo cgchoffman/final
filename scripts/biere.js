@@ -49,10 +49,11 @@ function init() {
 		center: users_location,
         styles: mapStyles
 	}
+	
 	showHideLoader();
 	//wait two seconds for showHideLoader to complete
-	showHideMap() 
-	//setTimeout(2000, function(){ showHideMap() });
+	setTimeout( function(){ showHideMap() }, 2000);
+	
   } catch (e) {
 	console.log("Initializing map failed: " + e);
   }
@@ -75,6 +76,9 @@ function setPosition(position) {
 	users_location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);	
 }
 
+/**
+ * This actually only SHOWS the Map.  When it gets more complicated it can show and hide
+ */
 function showHideMap(){
 	$map_out.hide();
 	map = new google.maps.Map($map_out[0], mapOptions);
