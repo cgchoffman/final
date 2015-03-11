@@ -35,10 +35,15 @@ as fast as you can)
  -  map route from person
 
 ###ISSUES
-- Figure out why location isn't being loaded in google maps
-- trigger map load after location request dismissed positively.
+- Figure out why location isn't being loaded in google maps **FIXED**
+- trigger map load after location request dismissed positively.  **FIXED**
 - add marker where user is or default location.
--  
+- Chrome doesn't askd for location (force location request?)
+ - force request by checking if pref set
+ - ask user to choose location
+- Doesn't load users location everytime if it doesn't ask for it every time
+ - Add error logging when the request for position fails
+ - Doesn't load user location properly on mobile
 
 ####Nice to haves
 - Give option for user to choose location at any time
