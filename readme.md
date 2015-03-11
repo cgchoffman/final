@@ -20,10 +20,30 @@ A high level description of the tools to use in this project.
 #### Fine Grain Outline
 Describe in more detail, the workflow and usage of the application and how/when
 the tools above will be used there.
--  Pizza is **Ace**
+- Screenloads and asks for users location
+- when location is given, load map
+  - If user doesn't allow geolocation, tell user to select start location
+- place user marker
+- place beer location markers one at a time (unless it's super slow, then jsut
+as fast as you can)
 
 
+####Map listeners
+- onResize
+ - reload beer locations and display any that should be on the map
+- onclick (of location)
+ -  map route from person
 
+###ISSUES
+- Figure out why location isn't being loaded in google maps
+- trigger map load after location request dismissed positively.
+- add marker where user is or default location.
+-  
+
+####Nice to haves
+- Give option for user to choose location at any time
+- show beer stores too
+- Load information about locations (html templates for all known locations)
 
 [1]:https://developers.google.com/places/documentation/
 [2]:https://developers.google.com/maps/documentation/directions/
