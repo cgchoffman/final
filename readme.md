@@ -23,7 +23,7 @@ the tools above will be used there.
 - Screenloads and asks for users location
 - when location is given, load map
   - If user doesn't allow geolocation, tell user to select start location
-- place user marker
+- place user marker https://developers.google.com/maps/documentation/javascript/reference#Marker    
 - place beer location markers one at a time (unless it's super slow, then jsut
 as fast as you can)
 

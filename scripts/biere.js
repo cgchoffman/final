@@ -2,7 +2,7 @@ var $map_out = $("#map_out");  // The container for the map
 var map;  //  The Actual map it's self
 var mapStyles = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}]
 var user_position;
-var default_location = new google.maps.LatLng(49.281947, -123.121167);
+var default_position = new google.maps.LatLng(49.281947, -123.121167);
 var $loader = $("#loader");
 var $spinner = $("#load_spinner");
 
@@ -42,19 +42,19 @@ function getLocation() {
     };
 	if ("geolocation" in navigator) {
 		navigator.geolocation.getCurrentPosition(function(position){init(position)}, // If location is recieve then use it
-                                                 function(){init(default_location)}, // This means it failed, use default
+                                                 function(){init(default_position)}, // This means it failed, use default
                                                  geo_options); 
 	} else { 
 	   console.log("Geolocation is not supported by this browser.  Use default."); // this means it's not supported
 	}
 }
 
-function init(position = null) {
+var init = function initiate(position) {
     try{
-        if (position != null) {
+        if (position && position.coords && position.coords.coords) {
             console.log("setPosition:");
-            console.log("\tUsers Lat: " + ((position && position.coords) ? position.coords.latitude : null));
-            console.log("\tUsers Long: " + ((position && position.coords) ? position.coords.longitude : null));
+            console.log("\tUsers Lat: " + position.coords.latitude );
+            console.log("\tUsers Long: " + position.coords.longitude );
             user_position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         }
         
@@ -64,7 +64,7 @@ function init(position = null) {
         }
         console.log("Positions set, current state is:");
         console.log("\tUser Location: " + user_position);
-        console.log("\tDefault User Location: " + default_location);
+        console.log("\tDefault User Location: " + default_position);
         
         mapOptions = {
             zoom: 15,
