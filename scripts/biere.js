@@ -5,27 +5,8 @@ var user_position;
 var default_position = new google.maps.LatLng(49.281947, -123.121167);
 var $loader = $("#loader");
 var $spinner = $("#load_spinner");
+var userMarker;
 
-var opts = {
-  lines: 20, // The number of lines to draw
-  length: 15, // The length of each line
-  width: 6, // The line thickness
-  radius: 40, // The radius of the inner circle
-  corners: 1, // Corner roundness (0..1)
-  rotate: 0, // The rotation offset
-  direction: 1, // 1: clockwise, -1: counterclockwise
-  color: '#fff', // #rgb or #rrggbb or array of colors
-  speed: 2.2, // Rounds per second
-  trail: 10, // Afterglow percentage
-  shadow: false, // Whether to render a shadow
-  hwaccel: false, // Whether to use hardware acceleration
-  className: 'spinner', // The CSS class to assign to the spinner
-  zIndex: 2e9, // The z-index (defaults to 2000000000)
-  top: '50%', // Top position relative to parent
-  left: '50%' // Left position relative to parent
-};
-var target = document.getElementById('load_spinner');
-var spinner = new Spinner(opts).spin(target);
 
 console.log("Lets get started!  Where's the craft at??")
 console.log("Getting user location.");
@@ -66,33 +47,54 @@ var init = function initiate(position) {
         console.log("\tUser Location: " + user_position);
         console.log("\tDefault User Location: " + default_position);
         
-        mapOptions = {
-            zoom: 15,
-            center: user_position,
-            styles: mapStyles
-        }
         showHideLoader();
         //wait two seconds for showHideLoader to complete
         // this seems wrong that i delay one but not the other.
         // Feels like I should be passing in a delay for both.  Then it's
         // obvious to the reader when reading those two calls...er more obvs...
-        setTimeout(function(){ showHideMap() }, 2000);
+        setTimeout(function(){ showHideMap(); }, 2000);
+        
     } catch (e) {
       console.log("Initializing map failed: " + e);
     }
 
 }
 
-
 /**
  * Create and fade in the map
  */
 function showHideMap(){
-	$map_out.hide();
-	map = new google.maps.Map($map_out[0], mapOptions);
-	console.log("Showing Map.")
-	$map_out.fadeIn(1000, function(){ $map_out.show()});
+	//$map_out.hide();
+    mapOptions = {
+            zoom: 15,
+            center: user_position,
+            styles: mapStyles
+        };
+    map = new google.maps.Map($map_out[0], mapOptions);
+    
+    var userMarkerOptions = {
+      animation: google.maps.Animation.DROP,
+      draggable: true,
+      position: user_position,
+      map: map,
+      title: "YOU ARE HERE"
+    }
+    
+	console.log("Showing Map.");
+	//$map_out.fadeIn(1000, function(){ $map_out.show() });
+    setTimeout(function(){ loadUserMarker(userMarkerOptions) }, 3000);
+    
 }
+function loadUserMarker(markerOptions) {
+    userMarker = new google.maps.Marker({
+        animation: google.maps.Animation.DROP,
+        draggable: true,
+        position: user_position,
+        map: map,
+        title: "YOU ARE HERE"
+        });
+}
+
 
 // Show or hide loading div based on it's current display state.
 function showHideLoader() {
@@ -110,3 +112,24 @@ function showHideLoader() {
 		$loader.fadeIn(500, function(){ $loader.show()});
 	}
 }
+
+var opts = {
+  lines: 20, // The number of lines to draw
+  length: 15, // The length of each line
+  width: 6, // The line thickness
+  radius: 40, // The radius of the inner circle
+  corners: 1, // Corner roundness (0..1)
+  rotate: 0, // The rotation offset
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  color: '#fff', // #rgb or #rrggbb or array of colors
+  speed: 2.2, // Rounds per second
+  trail: 10, // Afterglow percentage
+  shadow: false, // Whether to render a shadow
+  hwaccel: false, // Whether to use hardware acceleration
+  className: 'spinner', // The CSS class to assign to the spinner
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  top: '50%', // Top position relative to parent
+  left: '50%' // Left position relative to parent
+};
+var target = document.getElementById('load_spinner');
+var spinner = new Spinner(opts).spin(target);

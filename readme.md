@@ -27,20 +27,46 @@ the tools above will be used there.
 - place beer location markers one at a time (unless it's super slow, then jsut
 as fast as you can)
 
+####User Marker Options
+- animation: DROP
+- draggable: true (but only if I can get it to update directions when dropped)
+- \*position:
+- map:
+- title: "YOU ARE HERE"
+- zIndex: (higher than all the others)
+
 
 ####Map listeners
+  AKA   google.maps.event.addListener(THING, event, WhatyouWannaDo?);
+  https://developers.google.com/maps/documentation/javascript/examples/marker-animations
+```javascript
+ google.maps.event.addListener(marker, 'click', toggleBounce);
+
+function toggleBounce() {
+
+  if (marker.getAnimation() != null) {
+    marker.setAnimation(null);
+  } else {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+  }
+}
+```
 - onResize
  - reload beer locations and display any that should be on the map
 - onclick (of location)
  -  map route from person
 
 ###ISSUES
-- Figure out why location isn't being loaded in google maps **FIXED**
-- trigger map load after location request dismissed positively.  **FIXED**
-- add marker where user is or default location.
+- Figure out why location isn't being loaded in google maps     **FIXED**
+- trigger map load after location request dismissed positively. **FIXED**
+- add marker where user is or default location.                 **ADDED**
+ - marker isn't loading, probably too soon after map load       **FIXED**
+ - need to make it load after the map finishes loading          **FIXED**
+- user_position isn't saving
 - Chrome doesn't askd for location (force location request?)
  - force request by checking if pref set
  - ask user to choose location
+ - Save location as html5 savestuff feature so on Chrome when it reloads it will use that.
 - Doesn't load users location everytime if it doesn't ask for it every time
  - Add error logging when the request for position fails
  - Doesn't load user location properly on mobile
