@@ -32,7 +32,7 @@ function getLocation() {
 
 var init = function initiate(position) {
     try{
-        if (position && position.coords && position.coords.coords) {
+        if (position && position.coords) {
             console.log("setPosition:");
             console.log("\tUsers Lat: " + position.coords.latitude );
             console.log("\tUsers Long: " + position.coords.longitude );
