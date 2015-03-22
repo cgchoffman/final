@@ -54,11 +54,59 @@ var init = function initiate(position) {
         // obvious to the reader when reading those two calls...er more obvs...
         setTimeout(function(){ showHideMap(); }, 2000);
         
+        // Retrieve the places around the user
+        setTimeout(function() { getPlaces(); }, 2000);
+        
     } catch (e) {
       console.log("Initializing map failed: " + e);
     }
 
 }
+
+// Retrieve all Places around user
+
+function getPlaces() {
+    console.log("Getting Places")
+    // Search params
+    var request = {
+        location: user_position,
+        radius: 5000,
+        types: ['beer', 'pub', 'craft']
+    };
+    infowindow = new google.maps.InfoWindow();
+    var service = new google.maps.places.PlacesService(map);
+    console.log("\tStarting search for Places...");
+    service.nearbySearch(request, callback);
+    console.log("\tSearch completed.");
+}
+
+function callback(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        console.log("\t" + results.length + " results were returned.");
+        for (var i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+        }
+    } else {
+        console.log("Places search failed: " + status);
+    }
+    console.log("Callback complete.  All Places markers created");
+}
+
+function createMarker(place) {
+    console.log("Creating marker for " + place.name);
+    var placeLoc = place.geometry.location;
+    var marker = new google.maps.Marker({
+        animation: google.maps.Animation.DROP,
+        map: map,
+        position: place.geometry.location
+    });
+    console.log("Adding 'click' eventListener on marker.");
+    google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
+    });
+}
+
 
 /**
  * Create and fade in the map
@@ -88,7 +136,7 @@ function showHideMap(){
 function loadUserMarker(markerOptions) {
     userMarker = new google.maps.Marker({
         animation: google.maps.Animation.DROP,
-        draggable: true,
+        draggable: false,
         position: user_position,
         map: map,
         title: "YOU ARE HERE"
