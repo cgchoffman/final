@@ -38,6 +38,7 @@ as fast as you can)
 ####Places Marker
 - [Search Sample][plc-srch]
 - [Sample where places marker is set][mark-place]
+- [Marker Icons][google-marker-ref]
 ```Javascript
 // Placing Place marker on the map, sample
  var request = {
@@ -109,3 +110,4 @@ function toggleBounce() {
 [4]:http://www.google.com/design/spec/material-design/introduction.html#
 [plc-srch]:https://developers.google.com/maps/documentation/javascript/examples/place-search
 [mark-place]:https://developers.google.com/maps/documentation/javascript/examples/place-details
+[google-marker-ref][https://sites.google.com/site/gmapsdevelopment/]

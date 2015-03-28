@@ -70,8 +70,9 @@ function getPlaces() {
     // Search params
     var request = {
         location: user_position,
-        radius: 5000,
-        types: ['beer', 'pub', 'craft']
+        radius: 1000,
+        //types: ['beer', 'pub', 'craft']
+        types: ['restaurant']
     };
     infowindow = new google.maps.InfoWindow();
     var service = new google.maps.places.PlacesService(map);
@@ -93,14 +94,15 @@ function callback(results, status) {
 }
 
 function createMarker(place) {
-    console.log("Creating marker for " + place.name);
+    //console.log("Creating marker for " + place.name);
     var placeLoc = place.geometry.location;
     var marker = new google.maps.Marker({
         animation: google.maps.Animation.DROP,
+        icon: 'http://www.google.com/mapfiles/kml/paddle/grn-circle.png',
         map: map,
         position: place.geometry.location
     });
-    console.log("Adding 'click' eventListener on marker.");
+    //console.log("Adding 'click' eventListener on marker.");
     google.maps.event.addListener(marker, 'click', function() {
         infowindow.setContent(place.name);
         infowindow.open(map, this);
@@ -114,30 +116,24 @@ function createMarker(place) {
 function showHideMap(){
 	//$map_out.hide();
     mapOptions = {
-            zoom: 15,
+            zoom: 14,
             center: user_position,
             styles: mapStyles
         };
     map = new google.maps.Map($map_out[0], mapOptions);
     
-    var userMarkerOptions = {
-      animation: google.maps.Animation.DROP,
-      draggable: true,
-      position: user_position,
-      map: map,
-      title: "YOU ARE HERE"
-    }
-    
 	console.log("Showing Map.");
 	//$map_out.fadeIn(1000, function(){ $map_out.show() });
-    setTimeout(function(){ loadUserMarker(userMarkerOptions) }, 3000);
+    setTimeout(function(){ loadUserMarker() }, 3000);
     
 }
-function loadUserMarker(markerOptions) {
+
+function loadUserMarker() {
     userMarker = new google.maps.Marker({
         animation: google.maps.Animation.DROP,
         draggable: false,
         position: user_position,
+        icon: 'http://www.google.com/mapfiles/kml/paddle/blu-diamond.png',
         map: map,
         title: "YOU ARE HERE"
         });
