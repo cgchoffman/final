@@ -161,6 +161,10 @@ function showHideLoader() {
 	}
 }
 
+/**
+ * LOAD SPINNER START
+ */
+// These are the options used for the load spinner.
 var opts = {
   lines: 20, // The number of lines to draw
   length: 15, // The length of each line
@@ -181,3 +185,6 @@ var opts = {
 };
 var target = document.getElementById('load_spinner');
 var spinner = new Spinner(opts).spin(target);
+/**
+ * LOAD SPINNER END
+ */
