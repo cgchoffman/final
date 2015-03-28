@@ -83,13 +83,29 @@ function toggleBounce() {
 - onclick (of location)
  -  map route from person
 
+###TO-DOs
+
+- Creat map with user location as centre                        **ADDED**
+- add marker where user is or default location.                 **ADDED**
+- directions                                                    **ADDED**
+- Re-skin the entire thing and fix flow
+- Allow dismiss directions
+ - must bring back markers
+- re-do marker search if centre of map changes
+- change marker onclick event to add html content that displays info about place and adds a *Directions* button.
+- Allow user to select a location as their location
+ - maybe a onfail function in the getLocation function that alerts user to choose locations
+ - once location is chosen THEN places search occurs
+
 ###ISSUES
+
+####Location
+
+- user_position isn't saving                                    **FIXED**
 - Figure out why location isn't being loaded in google maps     **FIXED**
 - trigger map load after location request dismissed positively. **FIXED**
-- add marker where user is or default location.                 **ADDED**
  - marker isn't loading, probably too soon after map load       **FIXED**
- - need to make it load after the map finishes loading          **FIXED**
-- user_position isn't saving                                    **FIXED**
+  - need to make it load after the map finishes loading          **FIXED**
 - Chrome doesn't askd for location (force location request?)
  - force request by checking if pref set
  - ask user to choose location
@@ -97,6 +113,14 @@ function toggleBounce() {
 - Doesn't load users location everytime if it doesn't ask for it every time 
  - Add error logging when the request for position fails
  - Doesn't load user location properly on mobile
+ 
+####Directions
+
+- loads off screen
+- should hide all markers
+ - should save those markers to be able to bring them back
+
+---
 
 ####Nice to haves
 - Give option for user to choose location at any time
