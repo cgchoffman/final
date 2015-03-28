@@ -1,5 +1,8 @@
 var $map_out = $("#map_out");  // The container for the map
 var map;  //  The Actual map it's self
+var directionsOut = $("#directions_out").get(0);
+var directionsService = new google.maps.DirectionsService();
+var directionsRenderer = null;
 var mapStyles = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}]
 var user_position;
 var default_position = new google.maps.LatLng(49.281947, -123.121167);
@@ -104,8 +107,11 @@ function createMarker(place) {
     });
     //console.log("Adding 'click' eventListener on marker.");
     google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(place.name);
-        infowindow.open(map, this);
+        getDirections(place);
+        // XXX Later create a button that get the directions for the location
+        // should still show information abotu the location
+        //infowindow.setContent(place.name);
+        //infowindow.open(map, this);
     });
 }
 
@@ -138,6 +144,41 @@ function loadUserMarker() {
         title: "YOU ARE HERE"
         });
 }
+
+
+/**
+ * Load directions for the selected point
+ */
+function getDirections(place){
+	console.log("Getting directions.");
+	//e.preventDefault();
+	
+    if(directionsRenderer != null){
+        directionsRenderer.setMap(null);
+        directionsRenderer.setPanel(null);
+    };
+
+    // set start point "user_position"
+    
+    // set desitination, this.location? since it's being run on a point click?	
+	
+	directionsRenderer = new google.maps.DirectionsRenderer();
+	directionsRenderer.setMap(map);
+	directionsRenderer.setPanel(directionsOut);
+	var request = {
+		origin: user_position,
+		destination: place.geometry.location,
+		travelMode: google.maps.TravelMode.WALKING
+	};
+	directionsService.route(request, function(result, status){
+		if(status == google.maps.DirectionsStatus.OK){
+			directionsRenderer.setDirections(result);	
+		}else {
+			alert('Directions Service was not successful for the following reason: ' + status);
+		}	
+	}); // end directionsService.route function	
+	console.log("Directions retrieved.");
+}// end click event handler
 
 
 // Show or hide loading div based on it's current display state.
