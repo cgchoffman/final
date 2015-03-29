@@ -1,13 +1,12 @@
 var $map_out = $("#map_out");  // The container for the map
 var map;  //  The Actual map it's self
-var directionsOut = $("#directions_out").get(0);
+var $directions_out = $("#directions_out")/*.get(0)*/;
 var directionsService = new google.maps.DirectionsService();
 var directionsRenderer = null;
 var mapStyles = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}]
 var user_position;
 var default_position = new google.maps.LatLng(49.281947, -123.121167);
 var $loader = $("#loader");
-var $spinner = $("#load_spinner");
 var userMarker;
 
 
@@ -164,7 +163,7 @@ function getDirections(place){
 	
 	directionsRenderer = new google.maps.DirectionsRenderer();
 	directionsRenderer.setMap(map);
-	directionsRenderer.setPanel(directionsOut);
+	directionsRenderer.setPanel($directions_out.get(0));
 	var request = {
 		origin: user_position,
 		destination: place.geometry.location,
@@ -178,6 +177,11 @@ function getDirections(place){
 		}	
 	}); // end directionsService.route function	
 	console.log("Directions retrieved.");
+    
+    // XXX This is bad new bears.  Def shouldn't be doing this manually
+    // This will break any kind of reflow I do with media queries.
+    $map_out.addClass('show_directions');
+    $directions_out.addClass('show_directions');
 }// end click event handler
 
 
@@ -185,13 +189,10 @@ function getDirections(place){
 function showHideLoader() {
 	console.log("$loader display state: " + $loader.css("display"));
 	if ($loader.css("display") != "none") {
-	  console.log("Hiding loader.");
-	  $spinner.fadeOut(1000, function(){
-		$spinner.hide();
-		$loader.fadeOut(1000, function(){
-		  $loader.hide()
-		  })
-		});
+        console.log("Hiding loader.");
+        $loader.fadeOut(1000, function(){
+            $loader.hide()
+        })
 	} else {
 		console.log("Showing loader.")
 		$loader.fadeIn(500, function(){ $loader.show()});
@@ -203,25 +204,29 @@ function showHideLoader() {
  */
 // These are the options used for the load spinner.
 var opts = {
-  lines: 20, // The number of lines to draw
+  lines: 12, // The number of lines to draw
   length: 15, // The length of each line
   width: 6, // The line thickness
-  radius: 40, // The radius of the inner circle
+  radius: 20, // The radius of the inner circle
   corners: 1, // Corner roundness (0..1)
   rotate: 0, // The rotation offset
   direction: 1, // 1: clockwise, -1: counterclockwise
   color: '#fff', // #rgb or #rrggbb or array of colors
   speed: 2.2, // Rounds per second
   trail: 10, // Afterglow percentage
-  shadow: false, // Whether to render a shadow
+  shadow: true, // Whether to render a shadow
   hwaccel: false, // Whether to use hardware acceleration
   className: 'spinner', // The CSS class to assign to the spinner
   zIndex: 2e9, // The z-index (defaults to 2000000000)
   top: '50%', // Top position relative to parent
   left: '50%' // Left position relative to parent
 };
-var target = document.getElementById('load_spinner');
-var spinner = new Spinner(opts).spin(target);
+var target = document.getElementById('loader');
+try{
+    var spinner = new Spinner(opts).spin(target);
+} catch(e){
+    console.log("Loading spinner failed: ERROR: " + e);
+}
 /**
  * LOAD SPINNER END
  */
