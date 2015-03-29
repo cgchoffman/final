@@ -29,36 +29,27 @@ html, body, #map_out, #directions_out {
     float: right;
 }
 
-#map_out .show_directions{
+#map_out.show_directions{
     width: 80%;
 }
-#directions_out .show_directions{
+#directions_out.show_directions{
     width: 20%;
 }
 
-/*@media only screen and (min-width: 960px){*/
-/*	#map_out .show_directions{*/
-/*       width: 80%;*/
-/*    }*/
-/*    #directions_out .show_directions{*/
-/*        width: 20%;*/
-/*    }*/
-/*}*/
-/**/
-/*@media only screen and (max-width: 960px){*/
-/*	#map_out .show_directions{*/
-/*       width: 70%;*/
-/*    }*/
-/*    #directions_out .show_directions{*/
-/*        width: 30%;*/
-/*    }*/
-/*}*/
-/**/
-/*@media only screen and (max-width: 650px){*/
-/*	#map_out .show_directions{*/
-/*       width: 60%;*/
-/*    }*/
-/*    #directions_out .show_directions{*/
-/*        width: 40%;*/
-/*    }*/
-/*}*/
+@media only screen and (max-width: 960px){
+	#map_out.show_directions{
+       width: 70%;
+    }
+    #directions_out.show_directions{
+        width: 30%;
+    }
+}
+
+@media only screen and (max-width: 650px){
+	#map_out.show_directions{
+       width: 60%;
+    }
+    #directions_out.show_directions{
+        width: 40%;
+    }
+/*}
