@@ -22,7 +22,7 @@ Describe in more detail, the workflow and usage of the application and how/when
 the tools above will be used there.
 - Screenloads and asks for users location                                   **DONE**
 - when location is given, load map                                          **DONE**
-  - If user doesn't allow geolocation, tell user to select start location
+  - If user doesn't allow geolocation, tell user to select start location   *will use search bar for this*
 - place user marker https://developers.google.com/maps/documentation/javascript/reference#Marker    **DONE**
 - place beer location markers one at a time (unless it's super slow, then just
 as fast as you can)
@@ -32,7 +32,7 @@ as fast as you can)
 - draggable: true (but only if I can get it to update directions when dropped) **DONE BUT NOT USED**
 - \*position:
 - map:
-- title: "YOU ARE HERE"
+- title: "YOU ARE HERE" **Used Icons for this**
 - zIndex: (higher than all the others)
 
 ####Places Marker
@@ -88,15 +88,19 @@ function toggleBounce() {
 - Creat map with user location as centre                        **ADDED**
 - add marker where user is or default location.                 **ADDED**
 - directions                                                    **ADDED**
-- Re-skin the entire thing and fix flow
+ - change marker onclick event to add html content that         **ADDED**
+  displays info about place and adds a *Directions* button.
+  - Remove directions button when directions are shown for
+    that location
+- Re-skin the entire thing and fix flow                         **DONE**
 - Allow dismiss directions
  - must bring back markers
 - re-do marker search if centre of map changes
-- change marker onclick event to add html content that displays info about place and adds a *Directions* button.
 - Allow user to select a location as their location
  - maybe a onfail function in the getLocation function that alerts user to choose locations
  - once location is chosen THEN places search occurs
 - use Google search input to allow user to enter address.
+- Retrieve more information about location to populate InfoWindow
 
 ###ISSUES
 
@@ -107,7 +111,7 @@ function toggleBounce() {
 - trigger map load after location request dismissed positively. **FIXED**
  - marker isn't loading, probably too soon after map load       **FIXED**
   - need to make it load after the map finishes loading          **FIXED**
-- Chrome doesn't askd for location (force location request?)
+- Chrome doesn't ask for location (force location request?)
  - force request by checking if pref set
  - ask user to choose location
  - Save location as html5 savestuff feature so on Chrome when it reloads it will use that.
