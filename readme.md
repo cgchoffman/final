@@ -96,6 +96,7 @@ function toggleBounce() {
 - Allow user to select a location as their location
  - maybe a onfail function in the getLocation function that alerts user to choose locations
  - once location is chosen THEN places search occurs
+- use Google search input to allow user to enter address.
 
 ###ISSUES
 

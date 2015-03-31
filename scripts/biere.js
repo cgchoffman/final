@@ -8,6 +8,7 @@ var user_position;
 var default_position = new google.maps.LatLng(49.281947, -123.121167);
 var $loader = $("#loader");
 var userMarker;
+var places;
 
 
 console.log("Lets get started!  Where's the craft at??")
@@ -78,13 +79,14 @@ function getPlaces() {
     };
     infowindow = new google.maps.InfoWindow();
     var service = new google.maps.places.PlacesService(map);
-    console.log("\tStarting search for Places...");
+    console.log("\tStarting search fr Places...");
     service.nearbySearch(request, callback);
     console.log("\tSearch completed.");
 }
 
 function callback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
+        places = results;
         console.log("\t" + results.length + " results were returned.");
         for (var i = 0; i < results.length; i++) {
             createMarker(results[i]);
@@ -106,11 +108,14 @@ function createMarker(place) {
     });
     //console.log("Adding 'click' eventListener on marker.");
     google.maps.event.addListener(marker, 'click', function() {
-        getDirections(place);
-        // XXX Later create a button that get the directions for the location
-        // should still show information abotu the location
-        //infowindow.setContent(place.name);
-        //infowindow.open(map, this);
+        var content = "<html><body>\
+                        <div><h3>" + place.name + "</h3></div>\
+                        <div>\
+                        <button onclick=\"getDirections('" + place.place_id + "')\">Directions</button>\
+                        </div>\
+                        <body></html>"
+        infowindow.setContent(content);
+        infowindow.open(map, this);
     });
 }
 
@@ -148,10 +153,17 @@ function loadUserMarker() {
 /**
  * Load directions for the selected point
  */
-function getDirections(place){
+function getDirections(place_id){
 	console.log("Getting directions.");
 	//e.preventDefault();
 	
+    var place = getPlaceByID(place_id);
+    
+    if (place == null) {
+        alert("Directions are totally broken.  You should probably reload the page");
+        return;
+    }
+    
     if(directionsRenderer != null){
         directionsRenderer.setMap(null);
         directionsRenderer.setPanel(null);
@@ -183,6 +195,16 @@ function getDirections(place){
     $map_out.addClass('show_directions');
     $directions_out.addClass('show_directions');
 }// end click event handler
+
+
+function getPlaceByID(place_id) {
+    for (var i = 0; i < places.length; ++i) {
+        if (places[i].place_id == place_id) {
+            return places[i]
+        }
+    }
+    return nulls;
+}
 
 
 // Show or hide loading div based on it's current display state.
