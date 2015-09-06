@@ -1,3 +1,5 @@
+
+
 var $map_out = $("#map_out");  // The container for the map
 var map;  //  The Actual map it's self
 var $directions_out = $("#directions_out")/*.get(0)*/;
@@ -13,7 +15,7 @@ var places;
 
 console.log("Lets get started!  Where's the craft at??")
 console.log("Getting user location.");
-getLocation() // This allows me to load the map only once the users location hase been given.
+getLocation(); // This allows me to load the map only once the users location hase been given.
 
 /**
  * Request user location, when received, called setPosition to actually set it
@@ -32,6 +34,34 @@ function getLocation() {
 	   console.log("Geolocation is not supported by this browser.  Use default."); // this means it's not supported
 	}
 }
+
+/**
+ * Sean drunk and editing.
+ */
+
+var xmlhttp = new XMLHttpRequest();
+//var url = "http://168.235.150.220/final/serverside/locations.json";
+var url = "scripts/locations.json";
+
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var myArr = JSON.parse(xmlhttp.responseText);
+        processResponse(myArr);
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function processResponse(arr) {
+    var i;
+    for(i = 0; i < arr.length; i++) {
+        createMarker(arr[i]);
+    }
+}
+
+
+/*************/
 
 var init = function initiate(position) {
     try{
@@ -98,13 +128,25 @@ function callback(results, status) {
 }
 
 function createMarker(place) {
+
+    var placeLoc;
     //console.log("Creating marker for " + place.name);
-    var placeLoc = place.geometry.location;
+    if (place.geometry){   
+        console.log(place.geometry.location);
+        placeLoc = place.geometry.location;
+    }else{
+        placeLoc = {
+            "G": place.geoCode.latitude,
+            "K":place.geoCode.longitude
+        }         
+        console.log('fuker in else');
+    }
+
     var marker = new google.maps.Marker({
         animation: google.maps.Animation.DROP,
         icon: 'http://www.google.com/mapfiles/kml/paddle/grn-circle.png',
         map: map,
-        position: place.geometry.location
+        position: placeLoc
     });
     //console.log("Adding 'click' eventListener on marker.");
     google.maps.event.addListener(marker, 'click', function() {
