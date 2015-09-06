@@ -32,7 +32,7 @@ class Location(object):
     profile: %s\n""" %(self.name, self.geoCode, self.address, self.logo, self.URL, self.photos, self.profile)
         print(slocation)
 
-config = json.loads(open("/Users/Yerac/Projects/web/final/serverside/config", "r").read())
+config = json.loads(open("config", "r").read())
 dataFile = "locations.json"
 keywords = "craft beer brewery"
 uid = "6043765045"
