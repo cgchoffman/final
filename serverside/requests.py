@@ -34,7 +34,7 @@ class Location(object):
 
 config = json.loads(open("config", "r").read())
 dataFile = "locations.json"
-keywords = "craft beer brewery"
+keywords = "craft beer brewery craftbeer"
 uid = "6043765045"
 where = "Vancouver"
 Sapikey = config["sandkey"] # Sandbox key

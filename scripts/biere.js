@@ -39,27 +39,33 @@ function getLocation() {
  * Sean drunk and editing.
  */
 
-var xmlhttp = new XMLHttpRequest();
-//var url = "http://168.235.150.220/final/serverside/locations.json";
-var url = "scripts/locations.json";
 
-
-xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        var myArr = JSON.parse(xmlhttp.responseText);
-        processResponse(myArr);
+function getJsonLocations() {
+    console.log("Getting json.")
+    var xmlhttp = new XMLHttpRequest();
+    //var url = "http://the-coop.ca/final/serverside/locations.json";
+    //var url = "http://168.235.150.220/final/serverside/locations.json";
+    var url = "serverside/locations.json";
+    
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var myArr = JSON.parse(xmlhttp.responseText);
+            processResponse(myArr);
+        }
+    }
+    xmlhttp.open("GET", url, true);
+    console.log("Sending AJAX request")
+    xmlhttp.send();
+    
+    function processResponse(arr) {
+        var i;
+        for(i = 0; i < arr.length; i++) {
+            setTimeout(function(){ getPlaces(arr[i].name); }, 2000);
+            console.log("name:" +  arr[i].name);
+        }
     }
 }
-xmlhttp.open("GET", url, true);
-xmlhttp.send();
-
-function processResponse(arr) {
-    var i;
-    for(i = 0; i < arr.length; i++) {
-        createMarker(arr[i]);
-    }
-}
-
 
 /*************/
 
@@ -88,7 +94,8 @@ var init = function initiate(position) {
         setTimeout(function(){ showHideMap(); }, 2000);
         
         // Retrieve the places around the user
-        setTimeout(function() { getPlaces(); }, 2000);
+        
+        setTimeout(function() { getJsonLocations(); }, 2000);
         
     } catch (e) {
       console.log("Initializing map failed: " + e);
@@ -98,15 +105,19 @@ var init = function initiate(position) {
 
 // Retrieve all Places around user
 
-function getPlaces() {
-    console.log("Getting Places")
+function getPlaces(name) {
+    console.log("Getting Places: " + name)
     // Search params
     var request = {
         location: user_position,
-        radius: 1000,
+        radius: 10000,
         //types: ['beer', 'pub', 'craft']
-        types: ['restaurant']
+        //types: ['craft beer', 'brewery', 'craftbeer', 'beer']
+        //keyword: ['bomber strange fellows']
+        name: name
     };
+    var requestField = request.name || request.types || request.keyword;
+    //console.log("\tLocation types: " + requestField.toString());
     infowindow = new google.maps.InfoWindow();
     var service = new google.maps.places.PlacesService(map);
     console.log("\tStarting search fr Places...");
@@ -131,7 +142,8 @@ function createMarker(place) {
 
     var placeLoc;
     //console.log("Creating marker for " + place.name);
-    if (place.geometry){   
+    if (place.geometry){
+        // This means it's a google places object already.
         console.log(place.geometry.location);
         placeLoc = place.geometry.location;
     }else{
